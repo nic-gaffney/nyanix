@@ -4,8 +4,8 @@
 #include <stdarg.h>
 #define FBWIDTH (80)
 #define FBHEIGHT (25)
-#define BUFFER_ADDR (0xb8000)
-#define FB_PRINTK_BUFF_SIZE (FBWIDTH * FBHEIGHT)
+#define BUFFER_ADDR ((struct FBchar *)0xb8000)
+#define FB_PRINTK_BUFF_SIZE (FBWIDTH * FBHEIGHT * 2)
 #define GETCOLOR(FG, BG) (FG | BG << 4)
 
 // Define colors for printing
@@ -34,9 +34,8 @@ struct FBchar {
     u8 color;
 };
 
-
 // Prototypes
-void initfb(void* fbaddr, u8 color);
+void initfb(struct FBchar *fbaddr, u8 color);
 void setColor(u8 fg, u8 bg);
 u32 printk(const char *format, ...);
 void putck(char c);

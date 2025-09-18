@@ -8,7 +8,7 @@ inline void setColor(u8 fg, u8 bg) { fb_color = GETCOLOR(fg, bg); }
 struct FBchar *fb = (struct FBchar *)BUFFER_ADDR;
 u8 fb_y = 0, fb_x = 0;
 
-void initfb(void *addr, u8 color) {
+void initfb(struct FBchar *addr, u8 color) {
     fb = addr;
     fb_color = color;
 }
@@ -117,7 +117,7 @@ void putck(char c) {
 
     // set video memeory to requested character
     fb[fb_x + FBWIDTH * fb_y] = (struct FBchar){
-        (uint8_t)c,
+        c,
         fb_color,
     };
 
@@ -136,9 +136,8 @@ int putsk(char *str) {
 
 // Call clear_row for every row
 void cls() {
-    for (u32 i = 0; i < FBHEIGHT; i++) {
+    for (u32 i = 0; i < FBHEIGHT; i++)
         clear_row(i);
-    }
     fb_x = 0;
     fb_y = 0;
 }

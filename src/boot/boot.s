@@ -1,3 +1,11 @@
+[bits 32]
+
+section .bss ; allocate some space for the stack
+align 16
+stack_bottom:
+resb 16384
+stack_top:
+
 section .text
 extern kmain
 global _start:function (_start.end - _start)
@@ -12,9 +20,3 @@ _start:
 .hang: hlt
   jmp .hang
 .end:
-
-section .bss ; allocate some space for the stack
-align 16
-stack_bottom:
-resb 16384
-stack_top:

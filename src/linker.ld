@@ -4,8 +4,8 @@ SECTIONS {
     /* 2M is a safe place to load, as it will be outside UEFI
      * and BIOS stuff. */
     . = 2M;
-    .mboot2 ALIGN (4K) : AT(ADDR(.mboot2)) {
-        *(.mboot2)
+    .mb2 ALIGN (4K) : AT(ADDR(.mb2)) {
+        *(.mb2)
     }
 
     .text  BLOCK(4K) : ALIGN(4K)
