@@ -34,11 +34,12 @@ struct FBchar {
     u8 color;
 };
 
-u8 fb_color = GETCOLOR(FB_COLOR_WHITE, FB_COLOR_BLACK);
 
 // Prototypes
-inline void setColor(u8 fg, u8 bg) { fb_color = GETCOLOR(fg, bg); }
-u32 printk(const u8 * format, ...);
-void putck(u8 c);
-i32 putsk(u8 * str);
-i32 formats(const u8 * format, u8 * buff, va_list args);
+void initfb(void* fbaddr, u8 color);
+void setColor(u8 fg, u8 bg);
+u32 printk(const char *format, ...);
+void putck(char c);
+i32 putsk(char *str);
+i32 formats(const char *format, char *buff, va_list args);
+void cls();

@@ -1,13 +1,22 @@
 #include "multiboot.h"
-#define TAGS MB2_TAGS(MB2_END_TAG)
+const mb2_tag_end END = (mb2_tag_end){0, 0, 8};
+const mb2_tag_fb MB2_FB = (mb2_tag_fb){
+    .type = MB2_HEADER_TAG_FB,
+    .flags = MB2_HEADER_TAG_OPT,
+    .size = 20,
+    .width = 1024,
+    .height = 768,
+    .depth = 32,
+};
 #define HEADER_LEN                                                             \
-    MB2_HEADER_LEN + mb2_tag_len(MB2_NUM_TAGS, (mb2_tag[MB2_NUM_TAGS])TAGS)
+    MB2_HEADER_LEN                                                             \
+    +END.size + MB2_FB.size
 
-struct mb2_header mboot2 = (struct mb2_header){
+mb2_header mboot2 = {
     .magic = MB2_MAGIC,
     .arch = MB2_ARCH_I386,
-    // Header
-    .header_len = 16 + mb2_tag_len(1, (mb2_tag[1]){(mb2_tag){0, 0, 8}}),
+    .header_len = HEADER_LEN,
     .checksum = -(MB2_MAGIC + MB2_ARCH_I386 + HEADER_LEN),
-    .tags = TAGS,
 };
+mb2_tag_fb mb2_fb = MB2_FB;
+mb2_tag_end end = END;
