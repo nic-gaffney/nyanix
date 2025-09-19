@@ -1,15 +1,17 @@
-#pragma once
+#ifndef FB_H
+#define FB_H 1
 // Width and height of the framebuffer
 #include "types.h"
 #include <stdarg.h>
 #define FBWIDTH (80)
 #define FBHEIGHT (25)
-#define BUFFER_ADDR ((struct FBchar *)0xb8000)
+#define BUFFER_ADDR 0xb8000
 #define FB_PRINTK_BUFF_SIZE (FBWIDTH * FBHEIGHT * 2)
 #define GETCOLOR(FG, BG) (FG | BG << 4)
+#define PIXEL_POS (4 * ((fb_y * 32) + fb_x))
 
 // Define colors for printing
-enum u8 {
+enum {
     FB_COLOR_BLACK = 0,
     FB_COLOR_BLUE = 1,
     FB_COLOR_GREEN = 2,
@@ -35,10 +37,13 @@ struct FBchar {
 };
 
 // Prototypes
-void initfb(struct FBchar *fbaddr, u8 color);
+void initfb(u64 fbaddr, u8 color);
 void setColor(u8 fg, u8 bg);
 u32 printk(const char *format, ...);
 void putck(char c);
 i32 putsk(char *str);
 i32 formats(const char *format, char *buff, va_list args);
 void cls();
+void sendb(u16 b);
+static volatile u16 fb_x, fb_y;
+#endif

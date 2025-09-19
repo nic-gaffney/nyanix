@@ -1,5 +1,5 @@
 section .init
-global _init:function
+global _init
 _init:
   push rbp
   mov rbp, rsp,

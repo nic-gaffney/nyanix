@@ -1,32 +1,13 @@
 #include "framebuffer.h"
 #include "multiboot.h"
 #include "types.h"
-#include <stdint.h>
 
 void kmain(u64 mb2_magic, u64 addr) {
-    mb2_tag *tag;
+    struct multiboot_tag *tag;
     u32 size;
 
     initfb(BUFFER_ADDR, GETCOLOR(FB_COLOR_WHITE, FB_COLOR_BLACK));
-    BUFFER_ADDR[0 + 80 * 0] =
-        (struct FBchar){'O', GETCOLOR(FB_COLOR_WHITE, FB_COLOR_BLACK)};
-    {
-        char c = 'c';
-        struct FBchar *fb = BUFFER_ADDR;
-        u32 fb_x = 0;
-        u32 fb_y = 0;
-        u32 fb_color = GETCOLOR(FB_COLOR_WHITE, FB_COLOR_BLACK);
-
-        // set video memeory to requested character
-        fb[fb_x + FBWIDTH * fb_y] = (struct FBchar){
-            c,
-            fb_color,
-        };
-
-        // iterate col
-        fb_x++;
-    }
-    // putck('c');
+    *((int *)0xb8000) = 0x07690748;
     while (1)
         ;
 

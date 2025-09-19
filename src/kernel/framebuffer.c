@@ -1,15 +1,15 @@
 #include "framebuffer.h"
 #include "string.h"
 #include <stdarg.h>
-u8 fb_color = GETCOLOR(FB_COLOR_WHITE, FB_COLOR_BLACK);
 
+static u8 fb_color;
+static struct FBchar *fb;
 inline void setColor(u8 fg, u8 bg) { fb_color = GETCOLOR(fg, bg); }
 
-struct FBchar *fb = (struct FBchar *)BUFFER_ADDR;
-u8 fb_y = 0, fb_x = 0;
-
-void initfb(struct FBchar *addr, u8 color) {
-    fb = addr;
+void initfb(u64 addr, u8 color) {
+    fb_x = 0;
+    fb_y = 0;
+    fb = (struct FBchar *)addr;
     fb_color = color;
 }
 

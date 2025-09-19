@@ -22,12 +22,12 @@ INCLUDES := -I$(INCLUDE_DIR)
 ASSEMBLER = nasm -felf64
 CC = $(TARGET)-gcc
 
-CFLAGS = $(INCLUDES) -std=gnu99 -ffreestanding -O2 -Wall -Wextra -ggdb
+CFLAGS = $(INCLUDES) -std=gnu99 -ffreestanding -O2 -Wall -Wextra -ggdb -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2
 TEST_FLAGS = -nographic
 
 # Linker info
 LINK_FILE = linker.ld
-LDFLAGS = -O2 -nostdlib -lgcc -ffreestanding
+LDFLAGS = -O2 -nostdlib -lgcc -ffreestanding -z max-page-size=0x1000
 
 # Objects
 OBJS =
