@@ -7,7 +7,10 @@ void kmain(u64 mb2_magic, u64 addr) {
     u32 size;
 
     initfb(BUFFER_ADDR, GETCOLOR(FB_COLOR_WHITE, FB_COLOR_BLACK));
-    *((int *)0xb8000) = 0x07690748;
+    putck('c');
+    // *((int *)0xb8000) = 0x07690748;
+    // printk("Hello World! %d\n", 5);
+    // putck('c');
     while (1)
         ;
 

@@ -48,16 +48,6 @@ MULTIBOOT_LOAD_PREFERENCE_HIGH equ  2
 MULTIBOOT_CONSOLE_FLAGS_CONSOLE_REQUIRED equ  1
 MULTIBOOT_CONSOLE_FLAGS_EGA_TEXT_SUPPORTED equ  2
 
-
-
-
-
-section .bss ; allocate some space for the stack
-align 16
-stack_bottom:
-resb 16384
-stack_top:
-
 section .mb2 align=4096
 multiboot_header: ; Initial header
         dd MULTIBOOT2_HEADER_MAGIC
@@ -95,6 +85,14 @@ align 8
         dw 0
         dd 8
 multiboot_header_end:
+
+section .bss ; allocate some space for the stack
+align 32
+stack_bottom:
+resb 16384
+stack_top:
+
+
 
 section .text
 extern kmain

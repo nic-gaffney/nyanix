@@ -22,7 +22,7 @@ INCLUDES := -I$(INCLUDE_DIR)
 ASSEMBLER = nasm -felf64
 CC = $(TARGET)-gcc
 
-CFLAGS = $(INCLUDES) -std=gnu99 -ffreestanding -O2 -Wall -Wextra -ggdb -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2
+CFLAGS = $(INCLUDES) -std=gnu99 -ffreestanding -O2 -Wall -Wextra -ggdb -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -MMD -MP
 TEST_FLAGS = -nographic
 
 # Linker info
@@ -49,12 +49,15 @@ OBJS += $(CRTEND_OBJ) $(CRTN_OBJ)
 INTERNAL_OBJS = $(CRTI_OBJ) $(ASM_OBJS) $(C_OBJS) $(CRTN_OBJ)
 DEPS := $(OBJS:.o=.d)
 
+-include $(DEPS)
+
 # Compile DB
 COMPDBS := $(C_OBJS:.o=.json)
 
 .PHONY: all
 # Build nyanix
 all: $(OUT_DIR)/$(ISO).iso
+	@make compdb
 
 .PHONY: run
 # Run nyanix in qemu
@@ -116,14 +119,14 @@ $(OUT_DIR)/isodir/boot/$(ISO).bin : $(OBJS)
 $(BUILD)/%.o: $(SRC)/%.s
 	@mkdir -p $(BUILD)
 	@mkdir -p $(@D)
-	@$(ASSEMBLER) $^ -o $@
+	@$(ASSEMBLER) $< -o $@
 	@echo "AS \t$<"
 
 # C object recipes
 $(BUILD)/%.o: $(SRC)/%.c
 	@mkdir -p $(BUILD)
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -c $^ -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "CC \t$<"
 
 # COMPDB recipe (looks at all compdbs)
@@ -134,6 +137,7 @@ $(BUILD)/compile_commands.json: $(COMPDBS)
 	@printf "]\n" >> $@
 	@for F in $(COMPDBS); \
 	do echo "COMPDB \t$$F"; done;
+
 
 # JSON recipe (looks at C files)
 $(BUILD)/%.json: $(SRC)/%.c
