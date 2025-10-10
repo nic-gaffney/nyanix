@@ -54,7 +54,6 @@ multiboot_header: ; Initial header
         dd GRUB_MULTIBOOT_ARCHITECTURE_I386
         dd multiboot_header_end - multiboot_header
         dd -(MULTIBOOT2_HEADER_MAGIC + GRUB_MULTIBOOT_ARCHITECTURE_I386 + (multiboot_header_end - multiboot_header))
-
 ; align 8
 ; flags_tag_start: ; Tell the system we need a console
 ;         dw MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS
@@ -62,7 +61,6 @@ multiboot_header: ; Initial header
 ;         dd flags_tag_end - flags_tag_start
 ;         dd MULTIBOOT_CONSOLE_FLAGS_EGA_TEXT_SUPPORTED
 ; flags_tag_end:
-
 align 8
 entry_address_tag_start: ;
         dw MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS
@@ -70,7 +68,6 @@ entry_address_tag_start: ;
         dd entry_address_tag_end - entry_address_tag_start ; This is 0xc
         dd _start
 entry_address_tag_end:
-
 ; align 8
 ; framebuffer_tag_start:
 ;         dw MULTIBOOT_HEADER_TAG_FRAMEBUFFER
@@ -80,6 +77,7 @@ entry_address_tag_end:
 ;         dd 768
 ;         dd 32
 ; framebuffer_tag_end:
+
 align 8
         dw MULTIBOOT_HEADER_TAG_END
         dw 0
@@ -102,8 +100,8 @@ _start:
   mov ebp, stack_top
   push $0
   popf
-  push ebx
-  push eax
+  push ebx ; push multiboot 2 information
+  push eax ; push address
   call kmain
   cli
 .hang: hlt
